@@ -16,7 +16,7 @@ interface CallDao {
     fun getRecentCalls(): Flow<List<CallEntity>>
 
     @Query("SELECT * FROM calls WHERE id = :id")
-    suspend fun getCall(id: String): CallEntity?
+    suspend fun getCall(id: Int): CallEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCall(call: CallEntity)

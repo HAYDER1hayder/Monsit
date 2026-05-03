@@ -6,8 +6,8 @@ import com.eloueduniv.monsit.data.model.Call
 
 @Entity(tableName = "calls")
 data class CallEntity(
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val contactName: String,
     val startTime: Long,
     val duration: Long,

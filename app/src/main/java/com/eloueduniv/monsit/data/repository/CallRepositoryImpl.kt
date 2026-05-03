@@ -11,7 +11,7 @@ class CallRepositoryImpl : CallRepository {
 
     private val _calls = mutableListOf(
         Call(
-            id = "1",
+            id = 1,
             contactName = "Amelie Davies",
             startTime = System.currentTimeMillis() - 1000 * 60 * 10, // 10 mins ago
             duration = 120,
@@ -22,7 +22,7 @@ class CallRepositoryImpl : CallRepository {
             note = null
         ),
         Call(
-            id = "2",
+            id = 2,
             contactName = "Amelie Davies",
             startTime = System.currentTimeMillis() - 1000 * 60 * 60 * 2, // 2 hours ago
             duration = 45,
@@ -33,7 +33,7 @@ class CallRepositoryImpl : CallRepository {
             note = null
         ),
         Call(
-            id = "3",
+            id = 3,
             contactName = "Amelie Davies",
             startTime = System.currentTimeMillis() - 1000 * 60 * 60 * 24, // 1 day ago
             duration = 300,
@@ -50,7 +50,7 @@ class CallRepositoryImpl : CallRepository {
     }
 
 
-    override suspend fun getCall(id: String): Call? {
+    override suspend fun getCall(id: Int): Call? {
         return _calls.first { it.id == id }
     }
 

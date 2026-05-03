@@ -9,7 +9,7 @@ interface CallRepository {
 
     fun getResentCalls(): Flow<List<Call>>
 
-    suspend fun getCall(id: String): Call?
+    suspend fun getCall(id: Int): Call?
 
     suspend fun addCall(call: Call)
 

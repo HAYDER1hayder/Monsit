@@ -66,7 +66,8 @@ import androidx.room3.PrimaryKey
 
 @Entity(tableName = "calls")
 data class CallEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val contactName: String,
     val startTime: Long,
     val duration: Long,
@@ -134,7 +135,7 @@ interface CallDao {
     fun getRecentCalls(): Flow<List<CallEntity>>
 
     @Query("SELECT * FROM calls WHERE id = :id")
-    suspend fun getCall(id: String): CallEntity?
+    suspend fun getCall(id: Int): CallEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCall(call: CallEntity)
@@ -222,7 +223,7 @@ class RoomCallRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCall(id: String): Call? {
+    override suspend fun getCall(id: Int): Call? {
         return callDao.getCall(id)?.asExternalModel()
     }
 

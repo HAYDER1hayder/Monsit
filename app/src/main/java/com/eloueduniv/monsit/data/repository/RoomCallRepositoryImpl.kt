@@ -24,7 +24,7 @@ class RoomCallRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCall(id: String): Call? {
+    override suspend fun getCall(id: Int): Call? {
         return callDao.getCall(id)?.asExternalModel()
     }
 

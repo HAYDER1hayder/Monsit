@@ -40,7 +40,7 @@ class AddCallViewModel @Inject constructor(private val addCallUseCase: AddCallUs
             }
             is AddCallUiAction.onAddCall -> {
                 val call = Call(
-                    id = "",
+                    id = 0,
                     contactName = _uiState.value.contactName ?: "",
                     startTime = _uiState.value.callDate.time + _uiState.value.callTime.time,
                     duration = _uiState.value.duration,
