@@ -25,7 +25,7 @@ class GeminiSummarizationService @Inject constructor() : SummarizationService {
 
             val response = generativeModel.generateContent(
                 content {
-                    text("Summarize the following call transcript concisely and highlight key action items:\n\n$text")
+                    text("Detect the language of the following call transcript and provide a concise summary and key action items IN THAT SAME LANGUAGE:\n\n$text")
                 }
             )
             response.text ?: "Summarization failed: Empty response"

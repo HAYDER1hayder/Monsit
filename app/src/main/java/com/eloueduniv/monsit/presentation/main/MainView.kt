@@ -1,6 +1,7 @@
 package com.eloueduniv.monsit.presentation.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,6 +31,7 @@ fun MainScreen(
     onNavigateToSearch: () -> Unit,
     onNavigateToContacts: () -> Unit,
     onNavigateToAdd: () -> Unit,
+    onNavigateToDetail: (Int) -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.mainUiState.collectAsState()
@@ -126,7 +128,7 @@ fun MainScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(uiState.calls) { call ->
-                                CallItem(call = call)
+                                CallItem(call = call, onClick = { onNavigateToDetail(call.id) })
                             }
                         }
                     }
@@ -137,9 +139,9 @@ fun MainScreen(
 }
 
 @Composable
-fun CallItem(call: Call) {
+fun CallItem(call: Call, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)

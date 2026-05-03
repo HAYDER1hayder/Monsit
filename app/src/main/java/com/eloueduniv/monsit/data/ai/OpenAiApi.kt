@@ -20,5 +20,12 @@ interface OpenAiApi {
 }
 
 data class TranscriptionResponse(
+    val text: String,
+    val segments: List<TranscriptionSegment>? = null
+)
+
+data class TranscriptionSegment(
+    val start: Double,
+    val end: Double,
     val text: String
 )
