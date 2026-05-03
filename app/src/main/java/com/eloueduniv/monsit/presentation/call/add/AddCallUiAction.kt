@@ -9,5 +9,8 @@ sealed class AddCallUiAction {
     data class onDurationChange(val duration: Long) : AddCallUiAction()
     data class onAudioUrlChange(val audioUrl: String) : AddCallUiAction()
     data class onNoteChange(val note: String) : AddCallUiAction()
+    object onProcessCall : AddCallUiAction()
+    data class onTranscriptChange(val transcript: String) : AddCallUiAction()
+    data class onSummaryChange(val summary: String) : AddCallUiAction()
     object onAddCall : AddCallUiAction()
 }

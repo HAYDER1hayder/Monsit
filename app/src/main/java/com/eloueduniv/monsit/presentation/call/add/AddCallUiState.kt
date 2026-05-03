@@ -8,5 +8,10 @@ data class AddCallUiState(
     val callTime : Date = Date(),
     val duration : Long = 0,
     val audioUrl: String? = null,
-    val note : String? = null
-    )
+    val note : String? = null,
+    val isProcessing: Boolean = false,
+    val processingMessage: String? = null,
+    val transcript: String? = null,
+    val summary: String? = null,
+    val errorMessage: String? = null
+)

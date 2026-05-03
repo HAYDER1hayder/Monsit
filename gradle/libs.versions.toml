@@ -11,6 +11,10 @@ composeBom = "2024.09.00"
 hilt = "2.59.2"
 ksp = "2.3.6"
 room3 = "3.0.0-alpha03"
+generativeai = "0.9.0"
+retrofit = "2.9.0"
+okhttp = "4.12.0"
+
 
 [libraries]
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -35,6 +39,14 @@ androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compo
 # Room 3
 room3-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "room3" }
 room3-compiler = { group = "androidx.room3", name = "room3-compiler", version.ref = "room3" }
+
+# AI & Cloud Dependencies
+google-ai-client = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

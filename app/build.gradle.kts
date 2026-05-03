@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -18,6 +20,20 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Load API Keys from local.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+        }
+
+        buildConfigField("String", "GROQ_API_KEY", "\"${localProperties.getProperty("groq.api.key") ?: ""}\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties.getProperty("gemini.api.key") ?: ""}\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -61,6 +77,13 @@ dependencies {
     // Room 3
     implementation(libs.room3.runtime)
     ksp(libs.room3.compiler)
+
+    // AI & Cloud
+    implementation(libs.google.ai.client)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
