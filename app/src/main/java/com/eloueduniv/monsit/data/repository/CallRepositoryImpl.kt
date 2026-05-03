@@ -50,7 +50,7 @@ class CallRepositoryImpl : CallRepository {
     }
 
 
-    override fun getCall(id: String): Call? {
+    override suspend fun getCall(id: String): Call? {
         return _calls.first { it.id == id }
     }
 
@@ -64,7 +64,7 @@ class CallRepositoryImpl : CallRepository {
         emitAll(callsFlow)
     }
 
-    override fun addCall(call: Call) {
+    override suspend fun addCall(call: Call) {
         _calls.add(call)
         callsFlow.tryEmit(_calls.toList())
     }

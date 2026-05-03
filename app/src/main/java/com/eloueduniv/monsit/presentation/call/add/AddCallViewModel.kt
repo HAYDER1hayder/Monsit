@@ -1,12 +1,14 @@
 package com.eloueduniv.monsit.presentation.call.add
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eloueduniv.monsit.data.model.Call
 import com.eloueduniv.monsit.domain.usecase.AddCallUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,8 +50,10 @@ class AddCallViewModel @Inject constructor(private val addCallUseCase: AddCallUs
                     contactId = 0,
                     note = _uiState.value.note
                 )
-                addCallUseCase(call)
+                viewModelScope.launch {
+                    addCallUseCase(call)
+                }
             }
         }
     }
-    }
+}
