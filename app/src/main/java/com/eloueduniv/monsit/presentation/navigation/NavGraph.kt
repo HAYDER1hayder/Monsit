@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.eloueduniv.monsit.presentation.call.add.AddCallScreen
+import com.eloueduniv.monsit.presentation.call.detail.CallDetailScreen
 import com.eloueduniv.monsit.presentation.main.MainScreen
 import com.eloueduniv.monsit.presentation.search.SearchScreen
 
@@ -27,6 +28,9 @@ fun NavGraph(
                 },
                 onNavigateToAdd = {
                     navController.navigate(Screen.AddCall.route)
+                },
+                onNavigateToDetail = { callId ->
+                    navController.navigate(Screen.CallDetail.createRoute(callId))
                 }
             )
         }
@@ -41,6 +45,16 @@ fun NavGraph(
             AddCallScreen(onBack = {
                 navController.popBackStack()
             })
+        }
+
+        composable(
+            route = Screen.CallDetail.route
+        ) {
+            CallDetailScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

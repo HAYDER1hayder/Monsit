@@ -5,5 +5,4 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.dagger.hilt.plugin) apply false
     alias(libs.plugins.room3) apply false
-
 }

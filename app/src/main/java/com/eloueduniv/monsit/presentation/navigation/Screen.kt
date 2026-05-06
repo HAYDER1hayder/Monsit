@@ -10,8 +10,8 @@ sealed class Screen (val route: String) {
 
     object AddCall: Screen("add_call")
 
-    object CallDetail: Screen("call_detail/callId"){
-        fun createRoute(callId: String) = "call_detail/$callId"
+    object CallDetail: Screen("call_detail/{callId}"){
+        fun createRoute(callId: Int) = "call_detail/$callId"
     }
 
     object ContactDetail: Screen("contact_detail/contactId"){

@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.navigation.compose.hiltViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,6 +32,15 @@ fun AddCallScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
+
+    // Audio Picker
+    val audioPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.onAction(AddCallUiAction.onAudioUrlChange(it.toString()))
+        }
+    }
 
     // Date Picker State
     var showDatePicker by remember { mutableStateOf(false) }
@@ -170,12 +182,20 @@ fun AddCallScreen(
             )
 
             // Audio URL
+            val displayAudioName = uiState.audioUrl?.let { url ->
+                if (url.startsWith("content://") || url.startsWith("file://")) {
+                    Uri.parse(url).lastPathSegment ?: url
+                } else url
+            } ?: ""
+
             AddCallTextField(
-                value = uiState.audioUrl ?: "",
-                onValueChange = { viewModel.onAction(AddCallUiAction.onAudioUrlChange(it)) },
-                label = "Audio URL",
-                placeholder = "Audio URL",
-                trailingIcon = Icons.Default.Share // Representing link/audio icon
+                value = displayAudioName,
+                onValueChange = {},
+                label = "Audio File",
+                placeholder = "Select Audio File",
+                trailingIcon = Icons.Default.Add,
+                readOnly = true,
+                onIconClick = { audioPickerLauncher.launch("audio/*") }
             )
 
             // Note
@@ -188,7 +208,81 @@ fun AddCallScreen(
                 modifier = Modifier.height(140.dp)
             )
 
+            if (uiState.isProcessing) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = uiState.processingMessage ?: "Processing...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            uiState.errorMessage?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+            }
+
+            // AI Generated Content
+            if (uiState.transcript != null || uiState.summary != null) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = "AI Generated Details",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+                    
+                    AddCallTextField(
+                        value = uiState.transcript ?: "",
+                        onValueChange = { viewModel.onAction(AddCallUiAction.onTranscriptChange(it)) },
+                        label = "Transcript",
+                        placeholder = "Call Transcript",
+                        singleLine = false,
+                        modifier = Modifier.height(120.dp)
+                    )
+
+                    AddCallTextField(
+                        value = uiState.summary ?: "",
+                        onValueChange = { viewModel.onAction(AddCallUiAction.onSummaryChange(it)) },
+                        label = "AI Summary",
+                        placeholder = "AI Summary",
+                        singleLine = false,
+                        modifier = Modifier.height(100.dp)
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
+
+            // AI Process Button
+            if (!uiState.isProcessing && !uiState.audioUrl.isNullOrEmpty()) {
+                OutlinedButton(
+                    onClick = { viewModel.onAction(AddCallUiAction.onProcessCall) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    border = ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp)
+                ) {
+                    Icon(Icons.Default.Refresh, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Transcribe & Summarize",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
 
             // Create Summary Button
             Button(
@@ -206,7 +300,7 @@ fun AddCallScreen(
                 )
             ) {
                 Text(
-                    text = "Create Summary",
+                    text = "Save Entry",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )

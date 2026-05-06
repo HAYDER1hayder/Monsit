@@ -8,10 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-
 class RoomCallRepositoryImpl @Inject constructor(
     private val callDao: CallDao
-): CallRepository {
+) : CallRepository {
 
     override fun getCalls(): Flow<List<Call>> {
         return callDao.getCalls().map { entities ->
