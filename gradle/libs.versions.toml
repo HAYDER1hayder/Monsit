@@ -10,6 +10,7 @@ kotlin = "2.0.21"
 composeBom = "2024.09.00"
 hilt = "2.59.2"
 ksp = "2.3.6"
+room3 = "3.0.0-alpha03"
 
 [libraries]
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -31,8 +32,13 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 
+#room3
+room3-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "room3" }
+room3-compiler = { group = "androidx.room3", name = "room3-compiler", version.ref = "room3" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 dagger-hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
+room3 = { id = "androidx.room3", version.ref = "room3" }

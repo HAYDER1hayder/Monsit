@@ -1,5 +1,6 @@
 package com.eloueduniv.monsit.data.repository
 
+import com.eloueduniv.monsit.data.local.dao.CallDao
 import com.eloueduniv.monsit.data.model.Call
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -7,11 +8,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
-class CallRepositoryImpl : CallRepository {
+class CallRepositoryImpl() : CallRepository {
 
     private val _calls = mutableListOf(
         Call(
-            id = "1",
+            id = 1,
             contactName = "Amelie Davies",
             startTime = System.currentTimeMillis() - 1000 * 60 * 10, // 10 mins ago
             duration = 120,
@@ -22,7 +23,7 @@ class CallRepositoryImpl : CallRepository {
             note = null
         ),
         Call(
-            id = "2",
+            id = 2,
             contactName = "Amelie Davies",
             startTime = System.currentTimeMillis() - 1000 * 60 * 60 * 2, // 2 hours ago
             duration = 45,
@@ -33,7 +34,7 @@ class CallRepositoryImpl : CallRepository {
             note = null
         ),
         Call(
-            id = "3",
+            id = 3,
             contactName = "Amelie Davies",
             startTime = System.currentTimeMillis() - 1000 * 60 * 60 * 24, // 1 day ago
             duration = 300,
@@ -50,7 +51,7 @@ class CallRepositoryImpl : CallRepository {
     }
 
 
-    override fun getCall(id: String): Call? {
+    override suspend fun getCall(id: Int): Call? {
         return _calls.first { it.id == id }
     }
 
@@ -64,7 +65,7 @@ class CallRepositoryImpl : CallRepository {
         emitAll(callsFlow)
     }
 
-    override fun addCall(call: Call) {
+    override suspend fun addCall(call: Call) {
         _calls.add(call)
         callsFlow.tryEmit(_calls.toList())
     }

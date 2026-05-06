@@ -1,7 +1,7 @@
 package com.eloueduniv.monsit.data.model
 
 data class Call(
-    val id: String,
+    val id: Int,
     val contactName: String,
     val startTime: Long,
     val duration: Long,
