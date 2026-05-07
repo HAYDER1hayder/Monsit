@@ -19,5 +19,8 @@ interface CallDao {
     suspend fun getCall(id: Int): CallEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCall(call: CallEntity)
+    suspend fun insertCall(call: CallEntity): Long
+
+    @androidx.room3.Update
+    suspend fun updateCall(call: CallEntity)
 }

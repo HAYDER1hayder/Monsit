@@ -65,8 +65,19 @@ class CallRepositoryImpl() : CallRepository {
         emitAll(callsFlow)
     }
 
-    override suspend fun addCall(call: Call) {
-        _calls.add(call)
+    override suspend fun addCall(call: Call): Int {
+        val newId = (_calls.maxByOrNull { it.id }?.id ?: 0) + 1
+        val newCall = call.copy(id = newId)
+        _calls.add(newCall)
         callsFlow.tryEmit(_calls.toList())
+        return newId
+    }
+
+    override suspend fun updateCall(call: Call) {
+        val index = _calls.indexOfFirst { it.id == call.id }
+        if (index != -1) {
+            _calls[index] = call
+            callsFlow.tryEmit(_calls.toList())
+        }
     }
 }

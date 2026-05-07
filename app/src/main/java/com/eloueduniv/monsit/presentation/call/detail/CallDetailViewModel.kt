@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eloueduniv.monsit.domain.usecase.GetCallByIdUseCase
+import com.eloueduniv.monsit.domain.usecase.ProcessCallUseCase
+import com.eloueduniv.monsit.domain.usecase.ProcessState
+import com.eloueduniv.monsit.domain.usecase.UpdateCallUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CallDetailViewModel @Inject constructor(
     private val getCallByIdUseCase: GetCallByIdUseCase,
+    private val processCallUseCase: ProcessCallUseCase,
+    private val updateCallUseCase: UpdateCallUseCase,
     @dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -137,6 +142,40 @@ class CallDetailViewModel @Inject constructor(
                 mediaPlayer?.let { it.isLooping = !it.isLooping }
             }
             CallDetailUiAction.OnShuffle -> {}
+            CallDetailUiAction.OnReprocess -> reprocessCall()
+        }
+    }
+
+    private fun reprocessCall() {
+        val call = _uiState.value.call ?: return
+        if (call.audioUrl.isBlank()) {
+            _uiState.update { it.copy(error = "No audio file available for processing") }
+            return
+        }
+
+        viewModelScope.launch {
+            processCallUseCase(call.audioUrl).collect { state ->
+                when (state) {
+                    is ProcessState.Transcribing -> {
+                        _uiState.update { it.copy(isProcessing = true, error = null) }
+                    }
+                    is ProcessState.Summarizing -> {
+                        // Optional: update UI message
+                    }
+                    is ProcessState.Success -> {
+                        val updatedCall = call.copy(
+                            transcript = state.result.transcript,
+                            summary = state.result.summary
+                        )
+                        updateCallUseCase(updatedCall)
+                        _uiState.update { it.copy(call = updatedCall, isProcessing = false) }
+                    }
+                    is ProcessState.Error -> {
+                        _uiState.update { it.copy(isProcessing = false, error = state.message) }
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 

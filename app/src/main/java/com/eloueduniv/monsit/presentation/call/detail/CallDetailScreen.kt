@@ -41,6 +41,19 @@ fun CallDetailScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
+                actions = {
+                    if (uiState.isProcessing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp).padding(4.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    } else {
+                        IconButton(onClick = { viewModel.onAction(CallDetailUiAction.OnReprocess) }) {
+                            Icon(Icons.Default.AutoFixHigh, contentDescription = "Reprocess")
+                        }
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color(0xFFE1F5FE)
                 )

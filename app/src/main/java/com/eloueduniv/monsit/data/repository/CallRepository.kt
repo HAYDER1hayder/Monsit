@@ -11,6 +11,8 @@ interface CallRepository {
 
     suspend fun getCall(id: Int): Call?
 
-    suspend fun addCall(call: Call)
+    suspend fun addCall(call: Call): Int
+
+    suspend fun updateCall(call: Call)
 
 }

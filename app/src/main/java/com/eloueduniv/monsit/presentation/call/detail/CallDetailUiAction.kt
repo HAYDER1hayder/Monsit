@@ -8,4 +8,5 @@ sealed interface CallDetailUiAction {
     data object OnLoop : CallDetailUiAction
     data object OnForward : CallDetailUiAction
     data object OnBackward : CallDetailUiAction
+    data object OnReprocess : CallDetailUiAction
 }

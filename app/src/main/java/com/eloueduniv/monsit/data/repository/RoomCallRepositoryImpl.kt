@@ -28,7 +28,11 @@ class RoomCallRepositoryImpl @Inject constructor(
         return callDao.getCall(id)?.asExternalModel()
     }
 
-    override suspend fun addCall(call: Call) {
-        callDao.insertCall(call.asEntity())
+    override suspend fun addCall(call: Call): Int {
+        return callDao.insertCall(call.asEntity()).toInt()
+    }
+
+    override suspend fun updateCall(call: Call) {
+        callDao.updateCall(call.asEntity())
     }
 }
